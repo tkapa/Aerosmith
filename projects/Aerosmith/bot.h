@@ -20,6 +20,7 @@ public:
 	virtual void result(bool won);
 	virtual void bulletResult(bool hit);
 	NodePos findValidNode();
+	bool findPath(NodePos startNode, NodePos endNode, BotOutput27 &output);
 
 	kf::Xor128 m_rand;
 	BotInitialData m_initialData;
@@ -30,6 +31,7 @@ public:
 
 	//NodePos m_currentNode;				//Initialised as the beginning of the path (destination)
 	NodePos m_smallestFNode;			//the node with the smallest F
+	NodePos dest;
 	std::vector<NodePos> m_openList;	//list for the open nodes
 	std::vector<NodePos> m_pathList;	//List of nodes to follow
 	bool pathFound = false;				//has a path been found?

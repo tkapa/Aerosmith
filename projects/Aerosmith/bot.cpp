@@ -37,89 +37,26 @@ void Aerosmith::init(const BotInitialData &initialData, BotAttributes &attrib)
 	}
 
 	initPass = true;
-
-	m_moveTarget.set(m_rand() % (m_initialData.mapData.width - 2) + 1.5, m_rand() % (m_initialData.mapData.width - 2) + 1.5);
+	m_map.clear();
+	dest = findValidNode();
 }
 
 void Aerosmith::update(const BotInput &input, BotOutput27 &output)
-{
-	/*output.moveDirection = m_moveTarget - input.position;
-	if (output.moveDirection.length() < 2)
-	{
-		m_moveTarget.set(m_rand() % (m_initialData.mapData.width - 2) + 1.5, m_rand() % (m_initialData.mapData.width - 2) + 1.5);
-	}*/
-	if (initPass || destinationReached) {
-		m_map.clear();
-		m_openList.push_back(findValidNode());
-
-		initPass = false;
-		destinationReached = false;
-	}
-
-	while (m_openList.size() >= 1 && !pathFound) {
-
-		NodePos m_currentNode = m_openList.front();
-
-		for (auto it = m_openList.begin();it <= m_openList.end();++it) {		//Find the smallest F on the list
-			if (m_map.getNode(*it).f <= m_map.getNode(m_smallestFNode).f) {
-				m_smallestFNode = *it;
-			}
-		}
-
-		for (int oy = -1;oy < 2;++oy) {			//Offset Y
-			for (int ox = -1; ox < 2;++ox) {	//Offset X
-				NodePos adj = NodePos(m_currentNode.x + ox, m_currentNode.y + oy);	//Get the pos of the node
-				int m_newG = m_g + m_map.getNode(adj).c;							//alter G
-
-				if (ox == 0 && oy == 0)			//Skip this node
-					continue;
-				if (ox != 0 && oy != 0)			//Skip diagonal nodes
-					continue;
-				if (m_map.getNode(adj).wall)	//Skip walls
-					continue;
-
-				if (m_map.getNode(adj).state == Node::NodeState::StateClosed)
-					continue;
-				else if (m_map.getNode(adj).state == Node::NodeState::StateOpen && m_newG < m_map.getNode(adj).g) {
-					m_map.getNode(adj).g = m_newG;
-					m_map.getNode(adj).h = abs(adj.x - input.position.x) + abs(adj.y - input.position.y);
-					m_map.getNode(adj).parent = m_currentNode;
-					m_map.getNode(adj).f = m_map.getNode(adj).g + m_map.getNode(adj).h;
-				}
-				else if (m_map.getNode(adj).state == Node::NodeState::StateNone) {
-					m_map.getNode(adj).g = m_newG;
-					m_map.getNode(adj).h = abs(adj.x - input.position.x) + abs(adj.y - input.position.y);
-					m_map.getNode(adj).parent = m_currentNode;
-					m_map.getNode(adj).f = m_map.getNode(adj).g + m_map.getNode(adj).h;
-					m_map.getNode(adj).state = Node::NodeState::StateOpen;
-					m_openList.push_back(adj);
-					++eraseIterator;
-				}
-			}
-		}
-		
-		m_map.getNode(m_currentNode).state == Node::NodeState::StateClosed;
-		m_currentNode = m_smallestFNode;
-		//m_openList.erase(m_openList.begin() + eraseIterator);
-	}
-
-	if (pathFound) {
-		m_moveTarget = kf::Vector2(m_map.getNode(m_openList[pathIter]).parent.x, m_map.getNode(m_openList[pathIter]).parent.y);
-
-		output.moveDirection = m_moveTarget - input.position;
-
-		if (output.moveDirection.length() <= 0.5f) {
-			++pathIter;
-		}
-
-
-		// How to render text on the screen.
-		output.text.clear();
-		char buf[100];
-		sprintf(buf, "%d", input.health);
-		output.text.push_back(TextMsg(buf, input.position - kf::Vector2(0.0f, 1.0f), 0.0f, 0.7f, 1.0f, 80));
-	}
+{	
 	output.motor = 1.0f;
+	findPath(dest, NodePos(std::abs(input.position.x), std::abs(input.position.y)), output);
+	kf::Vector2 moveToPos = kf::convertVector2<kf::Vector2>(m_map.getNode(kf::convertVector2<NodePos>(input.position)).parent);
+	moveToPos.x += 0.5f;
+	moveToPos.y += 0.5f;
+	kf::Vector2 distToDest = kf::Vector2(dest.x, dest.y) - input.position;
+
+	if (distToDest.length() <= 2.0f) {
+		m_map.clear();
+		dest = findValidNode();
+	}	
+	output.moveDirection = moveToPos - input.position;
+	output.lookDirection = output.moveDirection;
+	output.action = BotOutput27::shoot;
 }
 
 void Aerosmith::result(bool won)
@@ -141,4 +78,76 @@ NodePos Aerosmith::findValidNode() {
 	}
 
 	return newPos;
+}
+
+bool Aerosmith::findPath(NodePos destinationNode, NodePos myPosition, BotOutput27 &output) {
+	bool pathFound = false;
+	m_openList.clear();
+	m_openList.push_back(destinationNode);
+
+	while (!m_openList.empty()) {
+
+		auto currIt = m_openList.begin();
+		for (auto it = m_openList.begin();it != m_openList.end();++it) {		//Find the smallest F on the list
+			if (m_map.getNode(*it).f <= m_map.getNode(*currIt).f) {
+				currIt = it;
+			}
+		}
+
+		NodePos currentNodePos = *currIt;
+		Node &m_currentNode = m_map.getNode(currentNodePos);
+
+		m_currentNode.state = Node::StateClosed;
+		m_openList.erase(currIt);
+
+		for (int oy = -1;oy < 2;++oy) {			//Offset Y
+			for (int ox = -1; ox < 2;++ox) {	//Offset X
+				NodePos &adj = NodePos(currentNodePos.x + ox, currentNodePos.y + oy);	//Get the pos of the node
+				int m_newG = m_g + m_map.getNode(adj).c;							//alter G
+
+				if (ox == 0 && oy == 0)			//Skip this node
+					continue;	
+				if (m_map.getNode(adj).wall)	//Skip walls
+				{
+					output.motor = 0.5f;
+					continue;
+				}
+				if (ox == -1 && oy == -1) {
+					if (m_map.getNode(NodePos(adj.x + 1, adj.y)).wall || m_map.getNode(NodePos(adj.x, adj.y + 1)).wall) continue;
+				}
+				if (ox == 1 && oy == -1) {
+					if (m_map.getNode(NodePos(adj.x - 1, adj.y)).wall || m_map.getNode(NodePos(adj.x, adj.y + 1)).wall) continue;
+				}
+				if (ox == 1 && oy == 1) {
+					if (m_map.getNode(NodePos(adj.x -1, adj.y)).wall || m_map.getNode(NodePos(adj.x, adj.y -1)).wall) continue;
+				}
+				if (ox == -1 && oy == 1) {
+					if (m_map.getNode(NodePos(adj.x +1 , adj.y)).wall || m_map.getNode(NodePos(adj.x, adj.y-1 )).wall) continue;
+				}
+
+				if (m_map.getNode(adj).state == Node::StateClosed)		//Skip closed nodes
+					continue;
+				else if (m_map.getNode(adj).state == Node::StateOpen && m_newG < m_map.getNode(adj).g) {
+					m_map.getNode(adj).g = m_newG;
+					m_map.getNode(adj).h = abs(adj.x - destinationNode.x) + abs(adj.y - destinationNode.y);
+					m_map.getNode(adj).parent = currentNodePos;
+					m_map.getNode(adj).f = m_map.getNode(adj).g + m_map.getNode(adj).h;
+				}
+				else if (m_map.getNode(adj).state == Node::StateNone) {
+					m_map.getNode(adj).g = m_newG;
+					m_map.getNode(adj).h = abs(adj.x - destinationNode.x) + abs(adj.y - destinationNode.y);
+					m_map.getNode(adj).parent = currentNodePos;
+					m_map.getNode(adj).f = m_map.getNode(adj).g + m_map.getNode(adj).h;
+					m_map.getNode(adj).state = Node::StateOpen;
+					m_openList.push_back(adj);
+
+				}
+
+				if (adj.x == myPosition.x && adj.y == myPosition.y)
+					pathFound = true;
+			}
+		}
+	}
+
+	return pathFound;
 }
