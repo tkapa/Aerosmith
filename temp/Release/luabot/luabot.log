@@ -1,0 +1,15 @@
+﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(368,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
+  bot.cpp
+bot.cpp(23): warning C4311: 'type cast': pointer truncation from 'LuaBot *const ' to 'int'
+bot.cpp(23): warning C4302: 'type cast': truncation from 'LuaBot *const ' to 'int'
+bot.cpp(23): warning C4244: 'argument': conversion from 'time_t' to 'kf::u32', possible loss of data
+bot.cpp(76): warning C4244: '=': conversion from 'lua_Number' to 'float', possible loss of data
+bot.cpp(79): warning C4244: '=': conversion from 'lua_Number' to 'float', possible loss of data
+bot.cpp(82): warning C4244: '=': conversion from 'lua_Number' to 'float', possible loss of data
+bot.cpp(85): warning C4244: '=': conversion from 'lua_Number' to 'float', possible loss of data
+bot.cpp(171): warning C4244: '=': conversion from 'lua_Number' to 'float', possible loss of data
+bot.cpp(175): warning C4244: '=': conversion from 'lua_Number' to 'float', possible loss of data
+bot.cpp(178): warning C4244: '=': conversion from 'lua_Number' to 'float', possible loss of data
+bot.cpp(183): warning C4244: '=': conversion from 'lua_Number' to 'float', possible loss of data
+bot.cpp(186): warning C4244: '=': conversion from 'lua_Number' to 'float', possible loss of data
+LINK : fatal error LNK1181: cannot open input file 'lua51.lib'

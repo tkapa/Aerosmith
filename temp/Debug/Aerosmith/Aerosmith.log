@@ -1,27 +1,30 @@
 ﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(368,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
+  pathfind.cpp
+c:\users\kapa\downloads\gitkraken\aerosmith\projects\aerosmith\pathfind.cpp(60): warning C4244: 'argument': conversion from 'const float' to 'int', possible loss of data
   bot.cpp
-c:\users\tkapa\aerosmith\projects\aerosmith\bot.cpp(14): warning C4311: 'type cast': pointer truncation from 'Aerosmith *const ' to 'int'
-c:\users\tkapa\aerosmith\projects\aerosmith\bot.cpp(14): warning C4302: 'type cast': truncation from 'Aerosmith *const ' to 'int'
-c:\users\tkapa\aerosmith\projects\aerosmith\bot.cpp(14): warning C4244: 'argument': conversion from 'time_t' to 'kf::u32', possible loss of data
-c:\users\tkapa\aerosmith\projects\aerosmith\bot.cpp(47): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-c:\users\tkapa\aerosmith\projects\aerosmith\bot.cpp(51): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\tkapa\aerosmith\projects\aerosmith\bot.cpp(72): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\tkapa\aerosmith\projects\aerosmith\bot.cpp(76): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\tkapa\aerosmith\dev\sdk\include\kf\kf_vector2.h(527): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
-  c:\users\tkapa\aerosmith\projects\aerosmith\bot.cpp(48): note: see reference to function template instantiation 'T1 kf::convertVector2<NodePos,kf::Vector2>(const T2 &)' being compiled
+c:\users\kapa\downloads\gitkraken\aerosmith\projects\aerosmith\bot.cpp(14): warning C4311: 'type cast': pointer truncation from 'Aerosmith *const ' to 'int'
+c:\users\kapa\downloads\gitkraken\aerosmith\projects\aerosmith\bot.cpp(14): warning C4302: 'type cast': truncation from 'Aerosmith *const ' to 'int'
+c:\users\kapa\downloads\gitkraken\aerosmith\projects\aerosmith\bot.cpp(14): warning C4244: 'argument': conversion from 'time_t' to 'kf::u32', possible loss of data
+c:\users\kapa\downloads\gitkraken\aerosmith\projects\aerosmith\bot.cpp(47): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\kapa\downloads\gitkraken\aerosmith\projects\aerosmith\bot.cpp(51): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\kapa\downloads\gitkraken\aerosmith\projects\aerosmith\bot.cpp(72): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\kapa\downloads\gitkraken\aerosmith\projects\aerosmith\bot.cpp(76): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\kapa\downloads\gitkraken\aerosmith\dev\sdk\include\kf\kf_vector2.h(527): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+  c:\users\kapa\downloads\gitkraken\aerosmith\projects\aerosmith\bot.cpp(48): note: see reference to function template instantiation 'T1 kf::convertVector2<NodePos,kf::Vector2>(const T2 &)' being compiled
           with
           [
               T1=NodePos,
               T2=kf::Vector2
           ]
-c:\users\tkapa\aerosmith\dev\sdk\include\kf\kf_vector2.h(528): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
-c:\users\tkapa\aerosmith\dev\sdk\include\kf\kf_vector2.h(527): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
-  c:\users\tkapa\aerosmith\projects\aerosmith\bot.cpp(48): note: see reference to function template instantiation 'T1 kf::convertVector2<kf::Vector2,NodePos>(const T2 &)' being compiled
+c:\users\kapa\downloads\gitkraken\aerosmith\dev\sdk\include\kf\kf_vector2.h(528): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+c:\users\kapa\downloads\gitkraken\aerosmith\dev\sdk\include\kf\kf_vector2.h(527): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
+  c:\users\kapa\downloads\gitkraken\aerosmith\projects\aerosmith\bot.cpp(48): note: see reference to function template instantiation 'T1 kf::convertVector2<kf::Vector2,NodePos>(const T2 &)' being compiled
           with
           [
               T1=kf::Vector2,
               T2=NodePos
           ]
-c:\users\tkapa\aerosmith\dev\sdk\include\kf\kf_vector2.h(528): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
-  Aerosmith.vcxproj -> C:\Users\tkapa\Aerosmith\bin\data\bots\Aerosmith\Aerosmith_d.dll
-  Aerosmith.vcxproj -> C:\Users\tkapa\Aerosmith\bin\data\bots\Aerosmith\Aerosmith_d.pdb (Full PDB)
+c:\users\kapa\downloads\gitkraken\aerosmith\dev\sdk\include\kf\kf_vector2.h(528): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
+  Generating Code...
+     Creating library C:\Users\Kapa\Downloads\GitKraken\Aerosmith\temp\Debug\Aerosmith\Aerosmith_d.lib and object C:\Users\Kapa\Downloads\GitKraken\Aerosmith\temp\Debug\Aerosmith\Aerosmith_d.exp
+  Aerosmith.vcxproj -> C:\Users\Kapa\Downloads\GitKraken\Aerosmith\bin\data\bots\Aerosmith\Aerosmith_d.dll

@@ -21,6 +21,7 @@ public:
 	virtual void bulletResult(bool hit);
 	NodePos findValidNode();
 	bool findPath(NodePos startNode, NodePos endNode, BotOutput27 &output);
+	void alterMotor(BotInput &input, BotOutput27 &output);
 
 	kf::Xor128 m_rand;
 	BotInitialData m_initialData;
@@ -29,17 +30,23 @@ public:
 
 	Map m_map;
 
-	//NodePos m_currentNode;				//Initialised as the beginning of the path (destination)
+	//Pathfinding Variables
 	NodePos m_smallestFNode;			//the node with the smallest F
-	NodePos dest;
+	NodePos dest;						//Destination node
 	std::vector<NodePos> m_openList;	//list for the open nodes
-	std::vector<NodePos> m_pathList;	//List of nodes to follow
 	bool pathFound = false;				//has a path been found?
-	bool initPass = true;				//is this the first path made?
 	bool destinationReached = false;	//Have I reached my destination
 	int m_g = 0;						//Total distance travelled
-	int eraseIterator = 0;
-	int pathIter = 0;
+
+	//Combat Variables
+	kf::Vector2 m_enemyInitPos;			//Initial enemy position
+	kf::Vector2 m_enemyCurrPos;			//Current enemy pos
+	kf::Vector2 m_estEnemyPos;			//Where I think the enemy will be
+	int m_updateCount = 0;				//counts the number of updates
+	int m_enemyUpdateCount = 0;			//notes the last update I'd seen the enemy
+	int m_burstCount = 0;				//no of times I want to burst fire
+	float m_lookAngle;					//Angle I wanna look at
+	bool m_enemySeen = false;			//Have I seen the enemy?
 };
 
 

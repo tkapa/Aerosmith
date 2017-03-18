@@ -1,0 +1,8 @@
+﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(368,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
+  bot.cpp
+bot.cpp(16): warning C4244: 'argument': conversion from 'time_t' to 'kf::u32', possible loss of data
+     Creating library C:\Users\Kapa\Downloads\GitKraken\Aerosmith\temp\Release\manualbot\manualbot.lib and object C:\Users\Kapa\Downloads\GitKraken\Aerosmith\temp\Release\manualbot\manualbot.exp
+  Generating code
+  All 23 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  manualbot.vcxproj -> C:\Users\Kapa\Downloads\GitKraken\Aerosmith\bin\data\bots\manualbot\manualbot.dll

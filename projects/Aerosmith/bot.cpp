@@ -21,10 +21,10 @@ Aerosmith::~Aerosmith()
 void Aerosmith::init(const BotInitialData &initialData, BotAttributes &attrib)
 {
 	m_initialData = initialData;
-	attrib.health=1.0;
-	attrib.motor=1.0;
-	attrib.weaponSpeed=1.0;
-	attrib.weaponStrength=1.0;
+	attrib.health=0.3f;
+	attrib.motor=0.25f;
+	attrib.weaponSpeed=0.225f;
+	attrib.weaponStrength=0.225f;
 	dir.set(1, 0);
 
 	m_map.init(initialData.mapData.width, initialData.mapData.height);
@@ -35,28 +35,73 @@ void Aerosmith::init(const BotInitialData &initialData, BotAttributes &attrib)
 			m_map.getNode(NodePos(x, y)).wall = m_initialData.mapData.data[x + y*m_map.m_width].wall;
 		}
 	}
-
-	initPass = true;
 	m_map.clear();
 	dest = findValidNode();
 }
 
 void Aerosmith::update(const BotInput &input, BotOutput27 &output)
 {	
+	m_enemySeen = false;
 	output.motor = 1.0f;
+
+	//Find a path, change the moveToPos to the parent of the node I'm standing on
 	findPath(dest, NodePos(std::abs(input.position.x), std::abs(input.position.y)), output);
 	kf::Vector2 moveToPos = kf::convertVector2<kf::Vector2>(m_map.getNode(kf::convertVector2<NodePos>(input.position)).parent);
+
+	//Make sure the bot isn't running into the corner of the node
 	moveToPos.x += 0.5f;
 	moveToPos.y += 0.5f;
 	kf::Vector2 distToDest = kf::Vector2(dest.x, dest.y) - input.position;
 
+	//If I'm in the vicinity of my destination, clear the map find a new destination
 	if (distToDest.length() <= 2.0f) {
 		m_map.clear();
 		dest = findValidNode();
 	}	
+
+	if (input.scanResult.size() > 0) {
+		for (int i = 0; i < input.scanResult.size(); ++i) {
+			//if the scanned object is an enemy change some varables
+			if (input.scanResult[i].type == VisibleThing::e_robot) {
+				m_enemyCurrPos = input.scanResult[i].position;
+				m_burstCount = m_updateCount + 2;
+				m_enemySeen = true;
+			}
+		}
+	}
+
+	if (m_enemySeen) {
+		//Estimate the position if I've seen them before and can run the calculations
+		m_estEnemyPos = m_enemyInitPos;
+		if (m_enemyUpdateCount > -1) {
+			kf::Vector2 delta = m_enemyCurrPos - m_enemyInitPos;
+			m_estEnemyPos = m_enemyCurrPos + (delta / (m_updateCount - m_enemyUpdateCount))*2;
+		}
+
+		output.lookDirection = m_estEnemyPos - input.position;
+		output.action = BotOutput27::shoot;
+	}
+	else {
+		if (m_updateCount <= m_burstCount) {
+			output.lookDirection = m_estEnemyPos - input.position;
+			output.action = BotOutput27::shoot;
+		}
+		else {
+			output.lookDirection = output.moveDirection;
+			output.action = BotOutput27::scan;
+		}
+	}
+
+	//Move towards the desired positions
 	output.moveDirection = moveToPos - input.position;
-	output.lookDirection = output.moveDirection;
-	output.action = BotOutput27::shoot;
+
+	if (m_enemySeen)
+	{
+		m_enemyUpdateCount = m_updateCount;
+		m_enemyInitPos = m_enemyCurrPos;
+	}
+
+	++m_updateCount;
 }
 
 void Aerosmith::result(bool won)
